@@ -4,6 +4,10 @@ import React from 'react';
 
 import findToken from './findtoken';
 
+function log() {
+  console.log.apply(console, arguments);
+}
+
 export default class Autocomplete extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +18,7 @@ export default class Autocomplete extends React.Component {
   }
 
   handleChange = (event) => {
-    console.log(event.target.value, event.target.selectionEnd);
+    log(event.target.value, event.target.selectionEnd);
     var token = findToken(event.target.value, event.target.selectionEnd).value;
     this.setState({
       token
@@ -22,7 +26,7 @@ export default class Autocomplete extends React.Component {
   }
 
   handleKeyPress = (event) => {
-    // console.log('handleKeyPress', event.keyCode);
+    // log('handleKeyPress', event.keyCode);
     if (this.state.token && event.keyCode == 9 || event.keyCode == 13) {
       this.completeChoice(this.state.choice);
       event.preventDefault();
@@ -38,16 +42,19 @@ export default class Autocomplete extends React.Component {
     let before = this.input.value.slice(0, input.selectionEnd - fragment.length);
     let after = value.slice(input.selectionEnd + fragment.length + 1);
     value = before + match + ' ' + after;
-    console.log('new value: ', value);
+    log('new value: ', value);
     this.input.value = value;
   }
 
   matches() {
+    let results = [];
     if (this.state.token) {
+      log('matches has token');
       const options = ['apple', 'banana', 'carrots'];
-      return options.filter((option) => option.startsWith(this.state.token));
+      results = options.filter((option) => option.startsWith(this.state.token));
     }
-    return [];
+    log('matches: results=', results);
+    return results;
   }
 
   render() {
@@ -69,7 +76,7 @@ export default class Autocomplete extends React.Component {
         />
         <br/>
         token: {this.state.token}
-        <br/> options
+        <br/> options:
         <listComponent/>
       </p>
     );
