@@ -1,8 +1,8 @@
 {
-  "name": "react-component-boilerplate",
+  "name": "focuster-react-typeahead",
   "description": "Boilerplate for React.js components",
-  "author": "Juho Vepsalainen",
-  "user": "survivejs",
+  "author": "Jordan Baker",
+  "user": "focuster",
   "version": "2.6.4",
   "scripts": {
     "start": "webpack-dev-server",
@@ -48,6 +48,7 @@
     "json-loader": "^0.5.4",
     "karma": "^1.0.0",
     "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.1",
     "karma-coverage": "^1.0.0",
     "karma-mocha": "^1.1.1",
     "karma-phantomjs-launcher": "^1.0.1",
@@ -75,11 +76,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/survivejs/react-component-boilerplate.git"
+    "url": "https://github.com/focuster/focuster-react-typeahead.git"
   },
-  "homepage": "https://survivejs.github.io/react-component-boilerplate/",
+  "homepage": "https://focuster.github.io/focuster-react-typeahead/",
   "bugs": {
-    "url": "https://github.com/survivejs/react-component-boilerplate/issues"
+    "url": "https://github.com/focuster/focuster-react-typeahead/issues"
   },
   "keywords": [
     "react",

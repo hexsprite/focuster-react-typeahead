@@ -1,9 +1,9 @@
-[![build status](https://secure.travis-ci.org/survivejs/react-component-boilerplate.svg)](http://travis-ci.org/survivejs/react-component-boilerplate) [![bitHound Score](https://www.bithound.io/github/survivejs/react-component-boilerplate/badges/score.svg)](https://www.bithound.io/github/survivejs/react-component-boilerplate) [![Dependency Status](https://david-dm.org/survivejs/react-component-boilerplate.svg)](https://david-dm.org/survivejs/react-component-boilerplate)
-# react-component-boilerplate - Boilerplate for React.js components
+[![build status](https://secure.travis-ci.org/focuster/focuster-react-typeahead.svg)](http://travis-ci.org/focuster/focuster-react-typeahead) [![bitHound Score](https://www.bithound.io/github/focuster/focuster-react-typeahead/badges/score.svg)](https://www.bithound.io/github/focuster/focuster-react-typeahead) [![Dependency Status](https://david-dm.org/focuster/focuster-react-typeahead.svg)](https://david-dm.org/focuster/focuster-react-typeahead)
+# focuster-react-typeahead - Boilerplate for React.js components
 
 This is a simple boilerplate that has been developed to make it easier to develop React components and small projects.
 
-> Check out [SurviveJS - Webpack and React](http://survivejs.com/) to dig deeper into the topic.
+> Check out [SurviveJS - Webpack and React](http://focuster.com/) to dig deeper into the topic.
 
 ## Basic Usage
 
@@ -45,5 +45,5 @@ console.log(a + b);
 
 ## License
 
-*react-component-boilerplate* is available under MIT. See LICENSE for more details.
+*focuster-react-typeahead* is available under MIT. See LICENSE for more details.
 

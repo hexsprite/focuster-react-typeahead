@@ -26,8 +26,8 @@ const config = {
     demo: path.join(ROOT_PATH, 'demo'),
     tests: path.join(ROOT_PATH, 'tests')
   },
-  filename: 'boilerplate',
-  library: 'Boilerplate'
+  filename: 'focuster-react-typeahead',
+  library: 'Focuster React Typeahead'
 };
 const CSS_PATHS = [
   config.paths.demo,

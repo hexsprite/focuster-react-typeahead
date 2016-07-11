@@ -1,7 +1,7 @@
 import React from 'react';
 import Fork from 'react-ghfork';
 import pkgInfo from '../package.json';
-import Demo from './Demo.jsx';
+import Autocomplete from '../src/index.jsx';
 
 export default class App extends React.Component {
   render() {
@@ -9,8 +9,8 @@ export default class App extends React.Component {
       <div>
         <Fork className="right" project={pkgInfo.user + '/' + pkgInfo.name} />
         <p>Just demonstrating the awesomeness of this boilerplate here.</p>
-
-        <Demo />
+        <p>Hi</p>
+        <Autocomplete />
       </div>
     );
   }
