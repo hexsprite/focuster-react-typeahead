@@ -115,8 +115,7 @@ export default class Autocomplete extends React.Component {
     const style = {
       position: 'absolute',
       background: 'white',
-      border: '1px solid black',
-
+      border: '1px solid black'
     };
 
     let calculateStyle = (index) => {
@@ -163,11 +162,11 @@ export default class Autocomplete extends React.Component {
     return (
       <p>
         <input
-          type="text"
-          ref={(ref) => this.input = ref}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyPress}
+          ref={(ref) => this.input = ref}
           size={80}
+          type="text"
         />
       {this.state.showResults && this._renderSearchResults()}
       </p>

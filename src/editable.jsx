@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import Autocomplete from './index.jsx';
 
 class Editable extends React.Component {
