@@ -1,5 +1,5 @@
 import findToken from '../src/findtoken';
-
+import completeChoice from '../src/completion';
 // import {
 //   renderIntoDocument,
 //   findRenderedDOMComponentWithClass,
@@ -25,6 +25,23 @@ describe('findToken', function() {
       value: 'bar',
       token: '#'
     });
+  })
+
+  it('doesnt find token when theres a space', function() {
+    let result = findToken('#apple ', 13);
+    expect(result.value).to.equal(undefined);
   });
 
+  describe('completeChoice', function() {
+    it('completes at EOL', function() {
+      let result = completeChoice('#ap', 3, 'ap', 'apple');
+      expect(result).to.equal('#apple ');
+    });
+
+    it('completes in middle of line', function() {
+      let result = completeChoice('#ap #ed', 3, 'ap', 'apple');
+      expect(result).to.equal('#apple  #ed');
+    });
+
+  });
 });
