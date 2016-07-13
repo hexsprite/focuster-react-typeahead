@@ -5,21 +5,29 @@ class Editable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 'Some value',
+      value: this.props.value,
       editing: false
     };
   }
 
   handleClick = () => {
     this.setState({editing: true});
-    console.log('handleClick')
   }
 
   render () {
     if (this.state.editing) {
-      return <Autocomplete defaultValue={this.state.value}/>;
+      return (
+        <Autocomplete
+          defaultValue={this.state.value}
+          onChange={(value) => this.setState({value, editing: false})}
+        />);
     } else {
-      return <span onClick={this.handleClick}>{this.state.value}</span>;
+      return (
+        <span
+          dangerouslySetInnerHTML={{__html: this.props.displayValue}}
+          onClick={this.handleClick}
+        />
+      );
     }
   }
 }

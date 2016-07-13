@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import CaretCoordinates from 'textarea-caret-position';
 
 import findToken from './findtoken';
 import completeChoice from './completion'
@@ -42,19 +43,25 @@ export default class Autocomplete extends React.Component {
 
   handleKeyPress = (event) => {
     log('handleKeyPress', event.keyCode, this);
-    const KEY_UP = 38;
+    const KEY_ENTER = 13;
+    const KEY_ESC = 27;
     const KEY_DOWN = 40;
+    const KEY_UP = 38;
+    const KEY_TAB = 9;
 
     switch(event.keyCode) {
-      case 9:
-      case 13:
+      case KEY_TAB:
+      case KEY_ENTER:
+        //
         if (this.state.token && this.matches().length > 0) {
           this.completeChoice();
           event.preventDefault();
           event.stopPropagation();
+        } else if (event.keyCode == KEY_ENTER) {
+          this.handleBlur();
         }
         break;
-      case 27:
+      case KEY_ESC:
         this.setState({showResults: false});
         break;
       case KEY_UP:
@@ -112,8 +119,16 @@ export default class Autocomplete extends React.Component {
       return '';
     }
 
+    const coordinates = new CaretCoordinates(this.input, this.input.selectionStart).get();
+    const element = this.input;
+    const top = element.offsetTop + coordinates.top;
+    const left = element.offsetLeft + coordinates.left;
+    console.log('coordinates', coordinates);
+    console.log(top, left);
     const style = {
       position: 'absolute',
+      // top: top + 'px',
+      // left: left + 'px',
       background: 'white',
       border: '1px solid black'
     };
@@ -158,14 +173,23 @@ export default class Autocomplete extends React.Component {
     );
   }
 
+  handleBlur = () => {
+    console.log('handleBlur');
+    this.props.onChange(this.input.value);
+  }
+
   render() {
     return (
       <p>
-        <input
+        <textarea
+          defaultValue={this.props.defaultValue}
+          onBlur={this.handleBlur}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyPress}
           ref={(ref) => this.input = ref}
+          rows={1}
           size={80}
+          style={{resize: 'none'}}
           type="text"
         />
       {this.state.showResults && this._renderSearchResults()}

@@ -66,6 +66,8 @@
     "style-loader": "^0.13.1",
     "sync-exec": "^0.6.2",
     "system-bell-webpack-plugin": "^1.0.0",
+    "textarea-caret": "git+https://github.com/component/textarea-caret-position.git",
+    "textarea-caret-position": "^0.1.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
