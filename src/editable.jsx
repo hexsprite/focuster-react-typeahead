@@ -1,12 +1,12 @@
 import React from 'react'
-import Autocomplete from './index.jsx';
+import Autocomplete from './typeahead.jsx';
 
 class Editable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: this.props.value,
-      editing: false
+      editing: this.props.editing
     };
   }
 
@@ -14,12 +14,35 @@ class Editable extends React.Component {
     this.setState({editing: true});
   }
 
+  handleChange = (event, value) => {
+    // ignore empty values
+    if (!value.trim() && !this.props.allowEmpty) {
+      this.setState({editing: false});
+    } else {
+      if (this.props.onChange) {
+        const onChange = this.props.onChange;
+        onChange(event, value);
+      }
+      this.setState({value, editing: false})
+    }
+  }
+
+  handleKeyPress = (event) => {
+    if (event.keyCode == 27)
+      this.setState({value: this.props.value, editing: false})
+  }
+
   render () {
     if (this.state.editing) {
       return (
         <Autocomplete
-          defaultValue={this.state.value}
-          onChange={(value) => this.setState({value, editing: false})}
+          value={this.state.value}
+          onChange={(event, value) => this.handleChange(event, value)}
+          onBlur={(event, value) => this.handleChange(event, value)}
+          onKeyPress={(event) => this.handleKeyPress(event)}
+          focus={true}
+          options={this.props.options || []}
+          placeholder={this.props.placeholder}
         />);
     } else {
       return (
