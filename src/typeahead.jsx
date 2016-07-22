@@ -168,22 +168,22 @@ export default class Autocomplete extends React.Component {
       // left: left + 'px',
       background: 'white',
       border: '1px solid black',
-      'zIndex': 1  // might be Focuster specific
+      zIndex: 1  // might be Focuster specific
     };
 
     let calculateStyle = (index) => {
       let style = {
         color: 'black',
-        'padding-left': '5px',
-        'padding-right': '5px'
+        paddingLeft: '5px',
+        paddingRight: '5px'
       };
 
       if (this.state.selected == index)
         style = {
           background: 'blue',
           color: 'white',
-          'padding-left': '5px',
-          'padding-right': '5px'
+          paddingLeft: '5px',
+          paddingRight: '5px'
         };
       return style;
     };
@@ -214,7 +214,7 @@ export default class Autocomplete extends React.Component {
 
   handleBlur = (event) => {
     if (this.props.onBlur)
-      this.props.onBlur(event, this.state.value);
+      this.props.onBlur(event, this.state.value, this);
   }
 
   render() {
@@ -225,7 +225,6 @@ export default class Autocomplete extends React.Component {
           onBlur={this.handleBlur}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyPress}
-          onChange={this.handleChange}
           placeholder={this.props.placeholder}
           ref={(ref) => this.input = ref}
           style={{resize: 'none'}}
