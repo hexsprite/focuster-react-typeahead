@@ -3,7 +3,7 @@
   "description": "Boilerplate for React.js components",
   "author": "Jordan Baker",
   "user": "focuster",
-  "version": "2.6.4",
+  "version": "0.0.0",
   "scripts": {
     "start": "webpack-dev-server",
     "test": "karma start",
