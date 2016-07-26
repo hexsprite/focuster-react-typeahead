@@ -1,4 +1,4 @@
-import Autocomplete from './typeahead.jsx'
-import Editable from './editable.jsx'
+import Autocomplete from './typeahead.js'
+import Editable from './editable.js'
 
 export {Autocomplete, Editable};

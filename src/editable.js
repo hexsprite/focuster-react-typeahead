@@ -1,5 +1,5 @@
 import React from 'react'
-import Autocomplete from './typeahead.jsx';
+import Autocomplete from './typeahead.js';
 
 class Editable extends React.Component {
   constructor(props) {

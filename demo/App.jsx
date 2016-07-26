@@ -1,7 +1,7 @@
 import React from 'react';
 import Fork from 'react-ghfork';
 import pkgInfo from '../package.json';
-import Editable from '../src/editable.jsx';
+import Editable from '../src/editable.js';
 import TEST_OPTIONS from '../src/testoptions'
 
 export default class App extends React.Component {
