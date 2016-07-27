@@ -6,6 +6,7 @@ import HtmlWebpackRemarkPlugin from 'html-webpack-remark-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import SystemBellPlugin from 'system-bell-webpack-plugin';
 import CleanPlugin from 'clean-webpack-plugin';
+import WebpackShellPlugin from 'webpack-shell-plugin';
 import merge from 'webpack-merge';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -112,7 +113,16 @@ if (TARGET === 'start') {
           js
         }
       }),
-      new webpack.HotModuleReplacementPlugin()
+      new webpack.HotModuleReplacementPlugin(),
+      new WebpackShellPlugin({
+        onBuildEnd: [
+          'npm link focuster-react-typeahead',
+          'rm -rf ./dist-modules && babel ./src --out-dir ./dist-modules',
+          'sleep 1; npm install'
+        ],
+        dev: false,
+        verbose: true
+      })
     ],
     module: {
       loaders: [
