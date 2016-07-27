@@ -43,8 +43,8 @@ export default class Autocomplete extends React.Component {
 
   _change() {
     const token = findToken(this.input.value, this.input.selectionEnd).value;
-    const matches = this.matches();
-    const showResults = Boolean(token) && Boolean(matches.length);
+    const matches = this.matches(token);
+    const showResults = Boolean(token) && matches.length > 0;
     let selected = this.state.selected;
 
     if (!this.state.showResults && showResults) {
@@ -66,6 +66,7 @@ export default class Autocomplete extends React.Component {
   }
 
   handleKeyPress = (event) => {
+    let useKeyPress = true;
     log('handleKeyPress', event.keyCode, this);
 
     const KEY_ENTER = 13;
@@ -74,13 +75,13 @@ export default class Autocomplete extends React.Component {
     const KEY_UP = 38;
     const KEY_TAB = 9;
 
-    event.persist();
+    event.persist();  // this is needed why again? think it may be Focuster specific
 
     switch(event.keyCode) {
       case KEY_TAB:
       case KEY_ENTER:
         //
-        if (this.state.token && this.matches().length > 0) {
+        if (this.state.token && this.matches(this.state.token).length > 0) {
           this.completeChoice();
           event.preventDefault();
           event.stopPropagation();
@@ -93,8 +94,11 @@ export default class Autocomplete extends React.Component {
         }
         break;
       case KEY_ESC:
-        if (this.state.showResults)
+        if (this.state.showResults) {
           this.setState({showResults: false});
+          // in this case we'll ignore it so it doesn't close the input
+          useKeyPress = false;
+        }
         break;
       case KEY_UP:
         if (this.state.showResults) {
@@ -111,15 +115,21 @@ export default class Autocomplete extends React.Component {
         }
         break;
     }
-    if (this.props.onKeyPress) {
+    if (useKeyPress && this.props.onKeyPress) {
       this.props.onKeyPress(event);
     }
   }
 
   changeSelected(amount) {
+    log('changeSelected', amount, this.state.selected);
     let selected = this.state.selected + amount;
-    selected = Math.max(selected, 0);
-    selected = Math.min(selected, this.matches().length - 1);
+    const matches = this.matches(this.state.token);
+
+    if (selected < 0) {
+      selected = 0;
+    } else if (selected >= matches.length) {
+      selected = Math.max(0, matches.length - 1);
+    }
     log('changeSelected', selected);
     this.setState({selected});
   }
@@ -127,7 +137,7 @@ export default class Autocomplete extends React.Component {
   // input, token, position
   completeChoice() {
     const selectionEnd = this.input.selectionEnd;
-    const selected = this.matches()[this.state.selected];
+    const selected = this.matches(this.state.token)[this.state.selected];
     const value = completeChoice(
       this.input.value,
       this.input.selectionEnd,
@@ -138,22 +148,18 @@ export default class Autocomplete extends React.Component {
     this.setState({value, showResults: false}, () => {this._change()});
   }
 
-  matches() {
+  matches(token) {
     let results = [];
-    if (this.state.token) {
-      log('matches has token', this.state.token);
-      results = this.props.options.filter((option) => option.toLowerCase().startsWith(this.state.token.toLowerCase()));
+    if (token) {
+      results = this.props.options.filter((option) =>
+        option.toLowerCase().startsWith(token.toLowerCase())
+      );
     }
-    log('matches: results=', results);
     return results;
   }
 
   _renderSearchResults() {
-    if (!this.state.token) {
-      return '';
-    }
-
-    if (!this.matches()) {
+    if (!this.state.token || !this.matches(this.state.token).length) {
       return '';
     }
 
@@ -192,7 +198,7 @@ export default class Autocomplete extends React.Component {
     return (
       <div style={style}>
         {
-          this.matches().map(
+          this.matches(this.state.token).map(
             (match, index) =>
               <div onClick={this.handleMatchClick} style={calculateStyle(index)}>
                 {match}
@@ -205,7 +211,7 @@ export default class Autocomplete extends React.Component {
   handleMatchClick = (event) => {
     this.setState(
       {
-        selected: this.matches().indexOf(event.target.innerText)
+        selected: this.matches(this.state.token).indexOf(event.target.innerText)
       },
       () => {
         this.completeChoice();

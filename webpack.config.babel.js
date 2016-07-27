@@ -116,9 +116,8 @@ if (TARGET === 'start') {
       new webpack.HotModuleReplacementPlugin(),
       new WebpackShellPlugin({
         onBuildEnd: [
-          'npm link focuster-react-typeahead',
-          'rm -rf ./dist-modules && babel ./src --out-dir ./dist-modules',
-          'sleep 1; npm install'
+          'cd ~/co/focuster && echo $PWD && meteor npm link ~/co/focuster-react-typeahead && meteor npm i',
+          'echo $PWD && sleep 25 && npm i'
         ],
         dev: false,
         verbose: true
