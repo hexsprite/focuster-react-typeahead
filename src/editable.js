@@ -10,6 +10,10 @@ class Editable extends React.Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    this.setState(props);
+  }
+
   handleClick = () => {
     this.setState({editing: true});
   }

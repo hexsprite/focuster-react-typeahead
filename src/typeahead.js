@@ -37,31 +37,32 @@ export default class Autocomplete extends React.Component {
     }
   }
 
+  componentWillReceiveProps(props) {
+    this.setState(props);
+  }
+
   _change() {
-    const value = this.state.value;
-    log('_change', value);
     const token = findToken(this.input.value, this.input.selectionEnd).value;
-    const showResults = Boolean(token);
+    const matches = this.matches();
+    const showResults = Boolean(token) && Boolean(matches.length);
     let selected = this.state.selected;
+
     if (!this.state.showResults && showResults) {
       selected = 0;
     }
+
     this.setState({
-      // value,
       token,
       showResults,
       selected,
-      matches: this.matches()
+      matches
     });
   }
 
   handleChange = (event) => {
-    if (!event) return;
-    log(event.target.value, event.target.selectionEnd);
-    const value = event.target.value;
-    this.setState({value}, () => {
-      this._change();
-    });
+    if (event) {
+      this.setState({value: event.target.value}, () => { this._change() });
+    }
   }
 
   handleKeyPress = (event) => {
