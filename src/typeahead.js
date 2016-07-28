@@ -20,7 +20,7 @@ export default class Autocomplete extends React.Component {
       token: '',
       showResults: false,
       selected: 0,
-      value: this.props.value
+      value: this.props.value || ''
     };
   }
 
@@ -35,10 +35,6 @@ export default class Autocomplete extends React.Component {
       }, 0);
       this.input.focus();
     }
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState(props);
   }
 
   _change() {

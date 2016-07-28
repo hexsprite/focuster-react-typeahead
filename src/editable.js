@@ -5,13 +5,9 @@ class Editable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value,
-      editing: this.props.editing
+      value: this.props.value || '',
+      editing: this.props.editing || false
     };
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState(props);
   }
 
   handleClick = () => {
@@ -20,15 +16,13 @@ class Editable extends React.Component {
 
   handleChange = (event, value) => {
     // ignore empty values
-    if (!value.trim() && !this.props.allowEmpty) {
-      this.setState({editing: false});
-    } else {
-      if (this.props.onChange) {
-        const onChange = this.props.onChange;
-        onChange(event, value);
-      }
-      this.setState({value, editing: false})
+    const newState = {editing: false};
+    if (value.trim() || this.props.allowEmpty) {
+      const onChange = this.props.onChange;
+      onChange && onChange(event, value);
+      newState.value = value;
     }
+    this.setState(newState);
   }
 
   handleKeyPress = (event) => {
