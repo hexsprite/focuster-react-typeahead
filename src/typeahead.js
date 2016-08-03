@@ -112,7 +112,7 @@ export default class Autocomplete extends React.Component {
         break;
     }
     if (useKeyPress && this.props.onKeyPress) {
-      this.props.onKeyPress(event);
+      this.props.onKeyPress(event, this);
     }
   }
 
