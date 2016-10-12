@@ -20,7 +20,8 @@ export default class Autocomplete extends React.Component {
       token: '',
       showResults: false,
       selected: 0,
-      value: this.props.value || ''
+      value: this.props.value || '',
+      select: this.props.select || false
     };
   }
 
@@ -34,6 +35,17 @@ export default class Autocomplete extends React.Component {
           elem.style.height = 'auto';
       }, 0);
       this.input.focus();
+    }
+    if (this.props.select) {
+      // BAD BAD BAD _rootDOMNode
+      this.input._rootDOMNode.setSelectionRange(0, this.input.value.length);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.select) {
+      // BAD BAD BAD _rootDOMNode
+      this.input._rootDOMNode.setSelectionRange(0, this.input.value.length);
     }
   }
 

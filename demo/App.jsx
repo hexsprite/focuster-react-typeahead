@@ -11,10 +11,10 @@ export default class App extends React.Component {
         <Fork className="right" project={pkgInfo.user + '/' + pkgInfo.name} />
         <Editable
           displayValue="<b>foo</b> bar"
-          editing={true}
           options={TEST_OPTIONS}
           placeholder="placeholder"
           value="foo bar"
+          select={true}
         />
       </div>
     );

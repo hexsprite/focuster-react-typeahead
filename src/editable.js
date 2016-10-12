@@ -5,9 +5,14 @@ class Editable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value || '',
-      editing: this.props.editing || false
+      value: this.props.value,
+      editing: this.props.editing,
+      select: this.props.select
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({editing: nextProps.editing, select: nextProps.select})
   }
 
   handleClick = () => {
@@ -41,6 +46,7 @@ class Editable extends React.Component {
           focus={true}
           options={this.props.options || []}
           placeholder={this.props.placeholder}
+          select={this.props.select}
         />);
     } else {
       return (
@@ -51,6 +57,13 @@ class Editable extends React.Component {
       );
     }
   }
+}
+
+Editable.defaultProps = {
+  displayValue: (value) => value,
+  select: false,
+  editing: false,
+  value: ''
 }
 
 export default Editable;
