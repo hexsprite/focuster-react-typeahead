@@ -7,6 +7,7 @@ import Textarea from 'react-textarea-autosize';
 import findToken from './findtoken';
 import completeChoice from './completion'
 
+
 function log() {
   const doLog = 0;
   if (doLog)
@@ -26,19 +27,22 @@ export default class Autocomplete extends React.Component {
   }
 
   componentDidMount() {
+    // BAD BAD BAD _rootDOMNode
+    const elem = this.input._rootDOMNode;
     if (this.props.focus) {
       // workaround for the autosizing textarea setting wrong initial height
       // when opening with editing=true
       setTimeout(() => {
-        const elem = this.input._rootDOMNode;
-        if (elem.clientHeight < elem.scrollHeight)
+        if (elem.clientHeight < elem.scrollHeight) {
           elem.style.height = 'auto';
+        }
+        elem.scrollIntoView()
       }, 0);
       this.input.focus();
     }
     if (this.props.select) {
-      // BAD BAD BAD _rootDOMNode
-      this.input._rootDOMNode.setSelectionRange(0, this.input.value.length);
+      // select all the text
+      elem.setSelectionRange(0, this.input.value.length);
     }
   }
 

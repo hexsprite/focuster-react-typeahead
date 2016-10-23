@@ -39,14 +39,14 @@ class Editable extends React.Component {
     if (this.state.editing) {
       return (
         <Autocomplete
-          value={this.state.value}
-          onChange={(event, value) => this.handleChange(event, value)}
+          focus
           onBlur={(event, value) => this.handleChange(event, value)}
+          onChange={(event, value) => this.handleChange(event, value)}
           onKeyPress={(event) => this.handleKeyPress(event)}
-          focus={true}
           options={this.props.options || []}
           placeholder={this.props.placeholder}
           select={this.props.select}
+          value={this.state.value}
         />);
     } else {
       return (
