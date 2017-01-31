@@ -37,19 +37,12 @@ export default class Autocomplete extends React.Component {
           elem.style.height = 'auto';
         }
         elem.scrollIntoView()
+        if (this.props.select) {
+          // select all the text
+          elem.setSelectionRange(0, this.input.value.length);
+        }
       }, 0);
       this.input.focus();
-    }
-    if (this.props.select) {
-      // select all the text
-      elem.setSelectionRange(0, this.input.value.length);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.select) {
-      // BAD BAD BAD _rootDOMNode
-      this.input._rootDOMNode.setSelectionRange(0, this.input.value.length);
     }
   }
 
