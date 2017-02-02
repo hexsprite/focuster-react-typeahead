@@ -36,7 +36,7 @@ export default class Autocomplete extends React.Component {
         if (elem.clientHeight < elem.scrollHeight) {
           elem.style.height = 'auto';
         }
-        elem.scrollIntoView()
+        elem.scrollIntoViewIfNeeded()
         if (this.props.select) {
           // select all the text
           elem.setSelectionRange(0, this.input.value.length);
