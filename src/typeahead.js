@@ -168,15 +168,23 @@ export default class Autocomplete extends React.Component {
       return '';
     }
 
+    function offset(el) {
+      var rect = el.getBoundingClientRect(),
+      scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+    }
+
     const coordinates = new CaretCoordinates(this.input._rootDOMNode, this.input.selectionStart).get();
-    const element = this.input;
+    const element = this.input._rootDOMNode;
     log('_renderSearchResults coordinates', coordinates);
-    const top = element.offsetTop + coordinates.top;
-    const left = element.offsetLeft + coordinates.left;
+    const lineHeight = element.style.lineHeight ? parseFloat(element.style.lineHeight) : 20
+    const top = offset(element).top + coordinates.top + lineHeight;
+    const left = offset(element).left + coordinates.left;
     log('_renderSearchResults top=', top, 'left=', left);
     const style = {
-      position: 'absolute',
-      // top: top + 'px',
+      position: 'fixed',
+      top: top + 'px',
       // left: left + 'px',
       background: 'white',
       border: '1px solid black',
