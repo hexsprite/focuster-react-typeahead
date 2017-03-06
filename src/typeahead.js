@@ -44,6 +44,24 @@ export default class Autocomplete extends React.Component {
       }, 0);
       this.input.focus();
     }
+    // catch window scroll
+    this.findAncestor(elem, 'action-list__body')
+      .addEventListener('scroll', this.handleScroll);
+    this.findAncestor(elem, 'plan--multi-day')
+      .addEventListener('scroll', this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    const elem = this.input._rootDOMNode;
+    this.findAncestor(elem, 'action-list__body')
+      .removeEventListener('scroll', this.handleScroll);
+    this.findAncestor(elem, 'plan--multi-day')
+      .addEventListener('scroll', this.handleScroll);
+  }
+
+  findAncestor (el, cls) {
+    while ((el = el.parentElement) && !el.classList.contains(cls));
+    return el;
   }
 
   _change() {
@@ -68,6 +86,10 @@ export default class Autocomplete extends React.Component {
     if (event) {
       this.setState({value: event.target.value}, () => { this._change() });
     }
+  }
+
+  handleScroll = () => {
+    this.setState({ showResults: false });
   }
 
   handleKeyPress = (event) => {
