@@ -180,12 +180,12 @@ export default class Autocomplete extends React.Component {
     log('_renderSearchResults coordinates', coordinates);
     const lineHeight = element.style.lineHeight ? parseFloat(element.style.lineHeight) : 20
     const top = offset(element).top + coordinates.top + lineHeight;
-    const left = offset(element).left + coordinates.left;
+    const left = offset(element).left;
     log('_renderSearchResults top=', top, 'left=', left);
     const style = {
       position: 'fixed',
       top: top + 'px',
-      // left: left + 'px',
+      left: left + 'px',
       background: 'white',
       border: '1px solid black',
       zIndex: 1  // might be Focuster specific
