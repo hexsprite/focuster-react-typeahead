@@ -47,6 +47,9 @@ class Editable extends React.Component {
           placeholder={this.props.placeholder}
           select={this.props.select}
           value={this.state.value}
+          verticalScrollElement={this.props.verticalScrollElement}
+          horizontalScrollElement={this.props.horizontalScrollElement}
+          zIndex={this.props.zIndex}
         />);
     } else {
       return (

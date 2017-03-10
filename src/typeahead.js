@@ -45,18 +45,26 @@ export default class Autocomplete extends React.Component {
       this.input.focus();
     }
     // catch window scroll
-    this.findAncestor(elem, 'action-list__body')
-      .addEventListener('scroll', this.handleScroll);
-    this.findAncestor(elem, 'plan--multi-day')
-      .addEventListener('scroll', this.handleScroll);
+    if (this.props.verticalScrollElement) {
+      this.findAncestor(elem, this.props.verticalScrollElement)
+        .addEventListener('scroll', this.handleScroll);
+    }
+    if (this.props.horizontalScrollElement) {
+      this.findAncestor(elem, this.props.horizontalScrollElement)
+        .addEventListener('scroll', this.handleScroll);
+    }
   }
 
   componentWillUnmount() {
     const elem = this.input._rootDOMNode;
-    this.findAncestor(elem, 'action-list__body')
-      .removeEventListener('scroll', this.handleScroll);
-    this.findAncestor(elem, 'plan--multi-day')
-      .addEventListener('scroll', this.handleScroll);
+    if (this.props.verticalScrollElement) {
+      this.findAncestor(elem, this.props.verticalScrollElement)
+        .removeEventListener('scroll', this.handleScroll);
+    }
+    if (this.props.horizontalScrollElement) {
+      this.findAncestor(elem, this.props.horizontalScrollElement)
+        .addEventListener('scroll', this.handleScroll);
+    }
   }
 
   findAncestor (el, cls) {
@@ -210,7 +218,7 @@ export default class Autocomplete extends React.Component {
       left: left + 'px',
       background: 'white',
       border: '1px solid black',
-      zIndex: 1  // might be Focuster specific
+      zIndex: this.props.zIndex || 1
     };
 
     let calculateStyle = (index) => {
@@ -235,7 +243,7 @@ export default class Autocomplete extends React.Component {
         {
           this.matches(this.state.token).map(
             (match, index) =>
-              <div onClick={this.handleMatchClick} style={calculateStyle(index)}>
+              <div onClick={this.handleMatchClick} style={calculateStyle(index)} key={match}>
                 {match}
               </div>
         )}
