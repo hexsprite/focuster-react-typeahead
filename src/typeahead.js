@@ -171,7 +171,7 @@ export default class Autocomplete extends React.Component {
 
   // input, token, position
   completeChoice() {
-    const selectionEnd = this.input.selectionEnd;
+    let selectionEnd = this.input.selectionEnd;
     const selected = this.matches(this.state.token)[this.state.selected];
     const value = completeChoice(
       this.input.value,
@@ -179,8 +179,12 @@ export default class Autocomplete extends React.Component {
       this.state.token,
       selected
     );
-    this.input.selectionEnd = selectionEnd + selected.length - this.state.token.length + 1;
+    selectionEnd = selectionEnd + selected.length - this.state.token.length + 1;
     this.setState({value, showResults: false}, () => {this._change()});
+    setTimeout(() => {
+      this.input.focus()
+      this.input.selectionEnd = selectionEnd
+    }, 0)
   }
 
   matches(token) {
