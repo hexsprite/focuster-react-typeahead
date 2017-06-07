@@ -1,6 +1,8 @@
 [![build status](https://secure.travis-ci.org/focuster/focuster-react-typeahead.svg)](http://travis-ci.org/focuster/focuster-react-typeahead) [![bitHound Score](https://www.bithound.io/github/focuster/focuster-react-typeahead/badges/score.svg)](https://www.bithound.io/github/focuster/focuster-react-typeahead) [![Dependency Status](https://david-dm.org/focuster/focuster-react-typeahead.svg)](https://david-dm.org/focuster/focuster-react-typeahead)
 # focuster-react-typeahead - Boilerplate for React.js components
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/hexsprite/focuster-react-typeahead.svg)](https://greenkeeper.io/)
+
 This is a simple boilerplate that has been developed to make it easier to develop React components and small projects.
 
 > Check out [SurviveJS - Webpack and React](http://focuster.com/) to dig deeper into the topic.
