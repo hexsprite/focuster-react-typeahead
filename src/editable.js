@@ -1,18 +1,31 @@
+import _ from 'lodash'
 import React from 'react'
 import Autocomplete from './typeahead.js'
 
-class Editable extends React.PureComponent {
+class Editable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       value: this.props.value,
-      editing: this.props.editing,
-      select: this.props.select
+      editing: this.props.editing
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ editing: nextProps.editing, select: nextProps.select })
+  //
+  shouldComponentUpdate(nextProps, nextState) {
+    // if state changed or the props changed (except onChange callback)
+    const shouldUpdate =
+      !_.isEqual(this.state, nextState) ||
+      !_.isEqual(_.omit(this.props, 'onChange'), _.omit(nextProps, 'onChange'))
+    return shouldUpdate
+  }
+
+  componentWillReceiveProps({ editing, value }) {
+    this.setState({ editing })
+    // we should update our value if we are not editing
+    if (!editing && value !== this.state.value) {
+      this.setState({ value })
+    }
   }
 
   handleClick = () => {
@@ -23,8 +36,9 @@ class Editable extends React.PureComponent {
     // ignore empty values
     const newState = { editing: false }
     if (value.trim() || this.props.allowEmpty) {
-      const onChange = this.props.onChange
-      onChange && onChange(event, value)
+      if (this.props.onChange) {
+        this.props.onChange(event, value)
+      }
       newState.value = value
     }
     this.setState(newState)
@@ -40,15 +54,15 @@ class Editable extends React.PureComponent {
       return (
         <Autocomplete
           focus
-          onBlur={(event, value) => this.handleChange(event, value)}
-          onChange={(event, value) => this.handleChange(event, value)}
-          onKeyPress={event => this.handleKeyPress(event)}
+          horizontalScrollElement={this.props.horizontalScrollElement}
+          onBlur={this.handleChange.bind(this)}
+          onChange={this.handleChange.bind(this)}
+          onKeyPress={this.handleKeyPress.bind(this)}
           options={this.props.options || []}
           placeholder={this.props.placeholder}
           select={this.props.select}
           value={this.state.value}
           verticalScrollElement={this.props.verticalScrollElement}
-          horizontalScrollElement={this.props.horizontalScrollElement}
           zIndex={this.props.zIndex}
         />
       )
@@ -56,7 +70,7 @@ class Editable extends React.PureComponent {
       return (
         <span
           dangerouslySetInnerHTML={{ __html: this.props.displayValue }}
-          onClick={this.handleClick}
+          onClick={this.handleClick.bind(this)}
         />
       )
     }
@@ -64,9 +78,10 @@ class Editable extends React.PureComponent {
 }
 
 Editable.defaultProps = {
+  allowEmpty: false,
   displayValue: value => value,
-  select: false,
   editing: false,
+  select: false,
   value: ''
 }
 

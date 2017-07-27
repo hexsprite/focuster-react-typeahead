@@ -93,6 +93,7 @@
     "test:lint"
   ],
   "dependencies": {
+    "lodash": "^4.17.4",
     "react-textarea-autosize": "^4.0.4",
     "sync-exec": "^0.6.2",
     "textarea-caret": "git+https://github.com/component/textarea-caret-position.git",
