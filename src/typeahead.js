@@ -1,85 +1,89 @@
-'use strict';
+import React from 'react'
+import CaretCoordinates from 'textarea-caret-position'
+import Textarea from 'react-textarea-autosize'
 
-import React from 'react';
-import CaretCoordinates from 'textarea-caret-position';
-import Textarea from 'react-textarea-autosize';
-
-import findToken from './findtoken';
+import findToken from './findtoken'
 import completeChoice from './completion'
 
-
 function log() {
-  const doLog = 0;
-  if (doLog)
-    console.log.apply(console, arguments);
+  const doLog = 0
+  if (doLog) console.log.apply(console, arguments)
 }
 
 export default class Autocomplete extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       token: '',
       showResults: false,
       selected: 0,
       value: this.props.value || '',
       select: this.props.select || false
-    };
+    }
   }
 
   componentDidMount() {
     // BAD BAD BAD _rootDOMNode
-    const elem = this.input._rootDOMNode;
+    const elem = this.input._rootDOMNode
     if (this.props.focus) {
       // workaround for the autosizing textarea setting wrong initial height
       // when opening with editing=true
       setTimeout(() => {
         if (elem.clientHeight < elem.scrollHeight) {
-          elem.style.height = 'auto';
+          elem.style.height = 'auto'
         }
         elem.scrollIntoViewIfNeeded()
         if (this.props.select) {
           // select all the text
-          elem.setSelectionRange(0, this.input.value.length);
+          elem.setSelectionRange(0, this.input.value.length)
         }
-      }, 0);
-      this.input.focus();
+      }, 0)
+      this.input.focus()
     }
     // catch window scroll
     if (this.props.verticalScrollElement) {
-      this.findAncestor(elem, this.props.verticalScrollElement)
-        .addEventListener('scroll', this.handleScroll);
+      this.findAncestor(
+        elem,
+        this.props.verticalScrollElement
+      ).addEventListener('scroll', this.handleScroll)
     }
     if (this.props.horizontalScrollElement) {
-      this.findAncestor(elem, this.props.horizontalScrollElement)
-        .addEventListener('scroll', this.handleScroll);
+      this.findAncestor(
+        elem,
+        this.props.horizontalScrollElement
+      ).addEventListener('scroll', this.handleScroll)
     }
   }
 
   componentWillUnmount() {
-    const elem = this.input._rootDOMNode;
+    const elem = this.input._rootDOMNode
     if (this.props.verticalScrollElement) {
-      this.findAncestor(elem, this.props.verticalScrollElement)
-        .removeEventListener('scroll', this.handleScroll);
+      this.findAncestor(
+        elem,
+        this.props.verticalScrollElement
+      ).removeEventListener('scroll', this.handleScroll)
     }
     if (this.props.horizontalScrollElement) {
-      this.findAncestor(elem, this.props.horizontalScrollElement)
-        .addEventListener('scroll', this.handleScroll);
+      this.findAncestor(
+        elem,
+        this.props.horizontalScrollElement
+      ).addEventListener('scroll', this.handleScroll)
     }
   }
 
-  findAncestor (el, cls) {
+  findAncestor(el, cls) {
     while ((el = el.parentElement) && !el.classList.contains(cls));
-    return el;
+    return el
   }
 
   _change() {
-    const token = findToken(this.input.value, this.input.selectionEnd).value;
-    const matches = this.matches(token);
-    const showResults = Boolean(token) && matches.length > 0;
-    let selected = this.state.selected;
+    const token = findToken(this.input.value, this.input.selectionEnd).value
+    const matches = this.matches(token)
+    const showResults = Boolean(token) && matches.length > 0
+    let selected = this.state.selected
 
     if (!this.state.showResults && showResults) {
-      selected = 0;
+      selected = 0
     }
 
     this.setState({
@@ -87,100 +91,104 @@ export default class Autocomplete extends React.Component {
       showResults,
       selected,
       matches
-    });
+    })
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     if (event) {
-      this.setState({value: event.target.value}, () => { this._change() });
+      this.setState({ value: event.target.value }, () => {
+        this._change()
+      })
     }
   }
 
   handleScroll = () => {
-    this.setState({ showResults: false });
+    this.setState({ showResults: false })
   }
 
-  handleKeyPress = (event) => {
-    let useKeyPress = true;
-    log('handleKeyPress', event.keyCode, this);
+  handleKeyPress = event => {
+    let useKeyPress = true
+    log('handleKeyPress', event.keyCode, this)
 
-    const KEY_ENTER = 13;
-    const KEY_ESC = 27;
-    const KEY_DOWN = 40;
-    const KEY_UP = 38;
-    const KEY_TAB = 9;
+    const KEY_ENTER = 13
+    const KEY_ESC = 27
+    const KEY_DOWN = 40
+    const KEY_UP = 38
+    const KEY_TAB = 9
 
-    event.persist();  // this is needed why again? think it may be Focuster specific
+    event.persist() // this is needed why again? think it may be Focuster specific
 
-    switch(event.keyCode) {
+    switch (event.keyCode) {
       case KEY_TAB:
       case KEY_ENTER:
         //
         if (this.state.token && this.matches(this.state.token).length > 0) {
-          this.completeChoice();
-          event.preventDefault();
-          event.stopPropagation();
+          this.completeChoice()
+          event.preventDefault()
+          event.stopPropagation()
         } else if (event.keyCode == KEY_ENTER) {
           if (this.props.onChange) {
-            this.props.onChange(event, this.input.value, this);
+            this.props.onChange(event, this.input.value, this)
           }
-          event.preventDefault();
-          event.stopPropagation();
+          event.preventDefault()
+          event.stopPropagation()
         }
-        break;
+        break
       case KEY_ESC:
         if (this.state.showResults) {
-          this.setState({showResults: false});
+          this.setState({ showResults: false })
           // in this case we'll ignore it so it doesn't close the input
-          useKeyPress = false;
+          useKeyPress = false
         }
-        break;
+        break
       case KEY_UP:
         if (this.state.showResults) {
-          this.changeSelected(-1);
-          event.preventDefault();
-          event.stopPropagation();
+          this.changeSelected(-1)
+          event.preventDefault()
+          event.stopPropagation()
         }
-        break;
+        break
       case KEY_DOWN:
         if (this.state.showResults) {
-          this.changeSelected(1);
-          event.preventDefault();
-          event.stopPropagation();
+          this.changeSelected(1)
+          event.preventDefault()
+          event.stopPropagation()
         }
-        break;
+        break
     }
     if (useKeyPress && this.props.onKeyPress) {
-      this.props.onKeyPress(event, this);
+      this.props.onKeyPress(event, this)
     }
   }
 
   changeSelected(amount) {
-    log('changeSelected', amount, this.state.selected);
-    let selected = this.state.selected + amount;
-    const matches = this.matches(this.state.token);
+    log('changeSelected', amount, this.state.selected)
+    let selected = this.state.selected + amount
+    const matches = this.matches(this.state.token)
 
     if (selected < 0) {
-      selected = 0;
+      selected = 0
     } else if (selected >= matches.length) {
-      selected = Math.max(0, matches.length - 1);
+      selected = Math.max(0, matches.length - 1)
     }
-    log('changeSelected', selected);
-    this.setState({selected});
+    log('changeSelected', selected)
+    this.setState({ selected })
   }
 
   // input, token, position
   completeChoice() {
-    let selectionEnd = this.input.selectionEnd;
-    const selected = this.matches(this.state.token)[this.state.selected];
+    let selectionEnd = this.input.selectionEnd
+    const selected = this.matches(this.state.token)[this.state.selected]
     const value = completeChoice(
       this.input.value,
       this.input.selectionEnd,
       this.state.token,
       selected
-    );
-    selectionEnd = selectionEnd + selected.length - this.state.token.length + 1;
-    this.setState({value, showResults: false}, () => {this._change()});
+    )
+    selectionEnd = selectionEnd + selected.length - this.state.token.length + 1
+    this.setState({ value, showResults: false }, () => {
+      this._change()
+    })
     setTimeout(() => {
       this.input.focus()
       this.input.selectionEnd = selectionEnd
@@ -188,34 +196,39 @@ export default class Autocomplete extends React.Component {
   }
 
   matches(token) {
-    let results = [];
+    let results = []
     if (token) {
-      results = this.props.options.filter((option) =>
+      results = this.props.options.filter(option =>
         option.toLowerCase().startsWith(token.toLowerCase())
-      );
+      )
     }
-    return results;
+    return results
   }
 
   _renderSearchResults() {
     if (!this.state.token || !this.matches(this.state.token).length) {
-      return '';
+      return ''
     }
 
     function offset(el) {
       var rect = el.getBoundingClientRect(),
-      scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop
       return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
     }
 
-    const coordinates = new CaretCoordinates(this.input._rootDOMNode, this.input.selectionStart).get();
-    const element = this.input._rootDOMNode;
-    log('_renderSearchResults coordinates', coordinates);
-    const lineHeight = element.style.lineHeight ? parseFloat(element.style.lineHeight) : 20
-    const top = offset(element).top + coordinates.top + lineHeight;
-    const left = offset(element).left;
-    log('_renderSearchResults top=', top, 'left=', left);
+    const coordinates = new CaretCoordinates(
+      this.input._rootDOMNode,
+      this.input.selectionStart
+    ).get()
+    const element = this.input._rootDOMNode
+    log('_renderSearchResults coordinates', coordinates)
+    const lineHeight = element.style.lineHeight
+      ? parseFloat(element.style.lineHeight)
+      : 20
+    const top = offset(element).top + coordinates.top + lineHeight
+    const left = offset(element).left
+    log('_renderSearchResults top=', top, 'left=', left)
     const style = {
       position: 'fixed',
       top: top + 'px',
@@ -223,14 +236,14 @@ export default class Autocomplete extends React.Component {
       background: 'white',
       border: '1px solid black',
       zIndex: this.props.zIndex || 1
-    };
+    }
 
-    let calculateStyle = (index) => {
+    let calculateStyle = index => {
       let style = {
         color: 'black',
         paddingLeft: '5px',
         paddingRight: '5px'
-      };
+      }
 
       if (this.state.selected == index)
         style = {
@@ -238,37 +251,38 @@ export default class Autocomplete extends React.Component {
           color: 'white',
           paddingLeft: '5px',
           paddingRight: '5px'
-        };
-      return style;
-    };
+        }
+      return style
+    }
 
     return (
       <div style={style}>
-        {
-          this.matches(this.state.token).map(
-            (match, index) =>
-              <div onClick={this.handleMatchClick} style={calculateStyle(index)} key={match}>
-                {match}
-              </div>
-        )}
+        {this.matches(this.state.token).map((match, index) => (
+          <div
+            onClick={this.handleMatchClick}
+            style={calculateStyle(index)}
+            key={match}
+          >
+            {match}
+          </div>
+        ))}
       </div>
-    );
+    )
   }
 
-  handleMatchClick = (event) => {
+  handleMatchClick = event => {
     this.setState(
       {
         selected: this.matches(this.state.token).indexOf(event.target.innerText)
       },
       () => {
-        this.completeChoice();
+        this.completeChoice()
       }
-    );
+    )
   }
 
-  handleBlur = (event) => {
-    if (this.props.onBlur)
-      this.props.onBlur(event, this.state.value, this);
+  handleBlur = event => {
+    if (this.props.onBlur) this.props.onBlur(event, this.state.value, this)
   }
 
   render() {
@@ -280,13 +294,13 @@ export default class Autocomplete extends React.Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKeyPress}
           placeholder={this.props.placeholder}
-          ref={(ref) => this.input = ref}
-          style={{resize: 'none'}}
+          ref={ref => (this.input = ref)}
+          style={{ resize: 'none' }}
           rows={1}
           type="text"
         />
-      {this.state.showResults && this._renderSearchResults()}
-    </div>
-    );
+        {this.state.showResults && this._renderSearchResults()}
+      </div>
+    )
   }
 }
