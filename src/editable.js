@@ -20,8 +20,10 @@ class Editable extends React.Component {
     return shouldUpdate
   }
 
-  componentWillReceiveProps({ value }) {
+  componentWillReceiveProps(props) {
+    let { editing, value } = props
     // only update value if we are not editing
+    this.setState({ editing })
     if (!this.state.editing && value !== this.state.value) {
       this.setState({ value })
     }
